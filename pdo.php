@@ -16,20 +16,22 @@ try {
 } catch(PDOException $e) {
     echo "Connection failed: " . $e->getMessage();
 }
-$conn = null;
+//$conn = null;
 
-//mysqli_select_db($conn, $project );
 //****************************************************************************************
 $s = "SELECT * FROM accounts WHERE id < 6";
-$result = prepare($s);
+$result = $conn->prepare($s);
+$result->execute();
 
-$numRows = mysqli_num_rows($result);
+$numRows = $result->rowCount();
 echo "Results: $numRows";
+
 echo "<table border='1'><tr><th>ID</th><th>Email</th></tr>";
-while($row = mysqli_fetch_array($result, MYSQLI_ASSOC)){
+while($row = $result->fetch()){
 	$out = "<tr><td>" . $row["id"] . "</td><td>" . $row["email"] . "</td></tr><br>";
 	
 	echo $out;
 }
+$result->closeCursor();
 echo "</table>";
 ?>
