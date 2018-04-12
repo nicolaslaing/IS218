@@ -1,0 +1,11 @@
+h1 {
+	text-align: center;
+	background-color: tomato;
+}
+fieldset {
+	width: 20%;
+	margin: auto;
+}
+input {
+	margin: 3px;
+}
