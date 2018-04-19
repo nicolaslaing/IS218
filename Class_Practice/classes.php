@@ -111,28 +111,21 @@ class User {
 	}
 	
 	public function toHTML() {
-		$s = "SELECT * FROM accounts WHERE id=$id";
-		$result = $conn->prepare($s);
-		$result->execute();
-
-		$row = $result->fetch();
-			$out = "<table><tr>";
-			$out .= "<th>First name</th>";
-			$out .= "<th>Last name</th>";
-			$out .= "<th>Email</th>"
-			$out .= "<th>Phone</th>"
-			$out .= "<th>Birthday</th>"
-			$out .= "<th>Gender</th></tr>"
-			$out .= "<tr><td>" . $this->fname . "</td>";
-			$out .= "<td>" . $this->lname . "</td>";
-			$out .= "<td>" . $this->email . "</td>";
-			$out .= "<td>" . $this->phone . "</td>";
-			$out .= "<td>" . $this->birthday . "</td>";
-			$out .= "<td>" . $this->birthday . "</td>";
-			$out .= "</tr></table>";
+		$out = "<table><tr>";
+		$out .= "<th>First name</th>";
+		$out .= "<th>Last name</th>";
+		$out .= "<th>Email</th>"
+		$out .= "<th>Phone</th>"
+		$out .= "<th>Birthday</th>"
+		$out .= "<th>Gender</th></tr>"
+		$out .= "<tr><td>" . $this->fname . "</td>";
+		$out .= "<td>" . $this->lname . "</td>";
+		$out .= "<td>" . $this->email . "</td>";
+		$out .= "<td>" . $this->phone . "</td>";
+		$out .= "<td>" . $this->birthday . "</td>";
+		$out .= "<td>" . $this->birthday . "</td>";
+		$out .= "</tr></table>";
 		echo $out;
-		
-		$result->closeCursor();
 	}
 }
 /*
