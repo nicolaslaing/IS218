@@ -122,6 +122,7 @@ class User {
 		$out .= "<th>Gender</th></tr>";
 		$out .= "<tr><td>" . $this->getId() . "</td>";
 		$out .= "<td>" . $this->getFname() . "</td>";
+		$out .= "<td>" . $this->getFname() . "</td>";
 		$out .= "<td>" . $this->getLname() . "</td>";
 		$out .= "<td>" . $this->getEmail() . "</td>";
 		$out .= "<td>" . $this->getPhone() . "</td>";
@@ -143,7 +144,7 @@ class User {
 class UserDB {
 	public function _construct() {}
 	
-	public function getUsers() {
+	public static function getUsers() {
 		$conn = Database::getConnection();
 		$users = array();
 		
@@ -154,13 +155,15 @@ class UserDB {
 		$numRows = $result->rowCount();
 		echo "Results: $numRows";
 
-		while($rows = $result->fetch()){
-			$newUser = new User($rows['id'], $rows['email'], $rows['fname'], $rows['lname'], $rows['phone'], $rows['birthday'], $rows['gender'], $rows['password']);
-			
-			$users[] = $newUser;
-		}
+		$rows = $result->fetchAll();
 		$result->closeCursor();
 		
+		foreach ($rows as $rows) {
+			$user = new User($rows['id'], $rows['email'], $rows['fname'], $rows['lname'], $rows['phone'], $rows['birthday'], $rows['gender'], $rows['password']);
+			
+			$users[] = $user;
+		}
+		//print_r(array_values($users));
 		return $users;
 	}
 	public function newUser($id, $email, $fname, $lname, $phone, $birthday, $gender, $password) {
