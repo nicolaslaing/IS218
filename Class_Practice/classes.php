@@ -122,7 +122,6 @@ class User {
 		$out .= "<th>Gender</th></tr>";
 		$out .= "<tr><td>" . $this->getId() . "</td>";
 		$out .= "<td>" . $this->getFname() . "</td>";
-		$out .= "<td>" . $this->getFname() . "</td>";
 		$out .= "<td>" . $this->getLname() . "</td>";
 		$out .= "<td>" . $this->getEmail() . "</td>";
 		$out .= "<td>" . $this->getPhone() . "</td>";
@@ -160,10 +159,10 @@ class UserDB {
 		
 		foreach ($rows as $rows) {
 			$user = new User($rows['id'], $rows['email'], $rows['fname'], $rows['lname'], $rows['phone'], $rows['birthday'], $rows['gender'], $rows['password']);
-			
+
 			$users[] = $user;
 		}
-		//print_r(array_values($users));
+
 		return $users;
 	}
 	public function newUser($id, $email, $fname, $lname, $phone, $birthday, $gender, $password) {
@@ -208,6 +207,7 @@ class UserDB {
 		there’s	an	HTML	element	that	does	it	for	you)
 	b. Borders	should	be	specified	on	the	table.
 */
+$users = array();
 $users = UserDB::getUsers();
 
 foreach ($users as $user) :
