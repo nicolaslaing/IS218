@@ -17,7 +17,7 @@ class Database {
 	private static $dsn = 'mysql:host=sql1.njit.edu;dbname=nal9';
 	private static $conn;
 	
-	public function _construct () {}
+	public function __construct () {}
 
 	public static function getConnection() {
 		try {
@@ -43,7 +43,7 @@ class Database {
 class User {
 	private $id, $email, $fname, $lname, $phone, $birthday, $gender, $password;
 
-	public function _construct ($id, $email, $fname, $lname, $phone, $birthday, $gender, $password) {
+	public function __construct ($id, $email, $fname, $lname, $phone, $birthday, $gender, $password) {
 		$this->id = $id;
 		$this->email = $email;
 		$this->fname = $fname;
@@ -143,7 +143,7 @@ class User {
 	b. Note	we will only be	using the first method in this assignment
 */
 class UserDB {
-	public function _construct() {}
+	public function __construct() {}
 	
 	public static function getUsers() {
 		$conn = Database::getConnection();
