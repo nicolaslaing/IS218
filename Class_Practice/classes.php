@@ -113,13 +113,15 @@ class User {
 	//Translate into a table
 	public function toHTML() {
 		$out = "<table border='1'><tr>";
+		$out .= "<th>ID</th>";
 		$out .= "<th>First name</th>";
 		$out .= "<th>Last name</th>";
 		$out .= "<th>Email</th>";
 		$out .= "<th>Phone</th>";
 		$out .= "<th>Birthday</th>";
 		$out .= "<th>Gender</th></tr>";
-		$out .= "<tr><td>" . $this->getFname() . "</td>";
+		$out .= "<tr><td>" . $this->getId() . "</td>";
+		$out .= "<td>" . $this->getFname() . "</td>";
 		$out .= "<td>" . $this->getLname() . "</td>";
 		$out .= "<td>" . $this->getEmail() . "</td>";
 		$out .= "<td>" . $this->getPhone() . "</td>";
@@ -133,15 +135,12 @@ class User {
 4. You	need	to	create	a	UserDB Object (30%)
 	a. Should	have	static	methods that	can	be	reused for querying	the	accounts table:
 		i. Getting	all	users	in	accounts	table,	should	be	return	as	User	Objects.
-		ii. Inserting	a	new	user	
-		iii. Updating	a	user’s	password
-		iv. Deleting	a	user	
-	b. Note	we	will	only be	using	the	first	method	in	this	assignment
+		ii. Inserting a new user
+		iii. Updating a user’s password
+		iv. Deleting a user
+	b. Note	we will only be	using the first method in this assignment
 */
 class UserDB {
-	private $users;
-	//private static $conn = Database::getConnection();
-
 	public function _construct() {}
 	
 	public function getUsers() {
@@ -152,10 +151,11 @@ class UserDB {
 		$result = $conn->prepare($s);
 		$result->execute();
 		
-		$rows = $result->fetchAll();
-		
-		foreach ($rows as $row) {
-			$newUser = new User($row['id'], $row['email'], $row['fname'], $row['lname'], $row['phone'], $row['birthday'], $row['gender'], $row['password']);
+		$numRows = $result->rowCount();
+		echo "Results: $numRows";
+
+		while($rows = $result->fetch()){
+			$newUser = new User($rows['id'], $rows['email'], $rows['fname'], $rows['lname'], $rows['phone'], $rows['birthday'], $rows['gender'], $rows['password']);
 			
 			$users[] = $newUser;
 		}
@@ -205,7 +205,6 @@ class UserDB {
 		there’s	an	HTML	element	that	does	it	for	you)
 	b. Borders	should	be	specified	on	the	table.
 */
-//$conn = Database::getConnection();
 $users = UserDB::getUsers();
 
 foreach ($users as $user) :
