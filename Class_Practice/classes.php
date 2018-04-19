@@ -116,15 +116,23 @@ class User {
 		$result->execute();
 
 		$row = $result->fetch();
-			$out = "<fieldset><center><legend>You have successfully registered!<br /><br /></legend></center>";
-			$out .= "<center><div>";
-			$out .= "First name: " . $this->fname . "<br />";
-			$out .= "Last name: " . $this->lname . "<br />";
-			$out .= "Email: " . $this->email . "<br />";
-			$out .= "Phone: " . $this->phone . "<br />";
-			$out .= "Birthday: " . $this->birthday . "<br />";
-			$out .= "Gender: " . $this->gender . "<br /></div></center></fieldset>";
+			$out = "<table><tr>";
+			$out .= "<th>First name</th>";
+			$out .= "<th>Last name</th>";
+			$out .= "<th>Email</th>"
+			$out .= "<th>Phone</th>"
+			$out .= "<th>Birthday</th>"
+			$out .= "<th>Gender</th></tr>"
+			$out .= "<tr><td>" . $this->fname . "</td>";
+			$out .= "<td>" . $this->lname . "</td>";
+			$out .= "<td>" . $this->email . "</td>";
+			$out .= "<td>" . $this->phone . "</td>";
+			$out .= "<td>" . $this->birthday . "</td>";
+			$out .= "<td>" . $this->birthday . "</td>";
+			$out .= "</tr></table>";
 		echo $out;
+		
+		$result->closeCursor();
 	}
 }
 /*
