@@ -119,7 +119,8 @@ class User {
 		$out .= "<th>Email</th>";
 		$out .= "<th>Phone</th>";
 		$out .= "<th>Birthday</th>";
-		$out .= "<th>Gender</th></tr>";
+		$out .= "<th>Gender</th>";
+		$out .= "<th>Password</th></tr>";
 		$out .= "<tr><td>" . $this->getId() . "</td>";
 		$out .= "<td>" . $this->getFname() . "</td>";
 		$out .= "<td>" . $this->getLname() . "</td>";
@@ -127,6 +128,7 @@ class User {
 		$out .= "<td>" . $this->getPhone() . "</td>";
 		$out .= "<td>" . $this->getBirthday() . "</td>";
 		$out .= "<td>" . $this->getGender() . "</td>";
+		$out .= "<td>" . $this->getPassword() . "</td>";
 		$out .= "</tr></table><br />";
 		echo $out;
 	}
@@ -209,6 +211,8 @@ class UserDB {
 */
 $users = array();
 $users = UserDB::getUsers();
+
+//print_r(array_values($users));
 
 foreach ($users as $user) :
 	echo $user->toHTML();
