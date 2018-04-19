@@ -12,25 +12,21 @@ ini_set('display_errors' , 1);
 		method.	
 */
 class Database {
-	private $user, $password, $host, $dsn;
+	private static $user = "nal9";
+	private static $password = "Movlksomh123";
+	private static $dsn = 'mysql:host=sql1.njit.edu;dbname=nal9';
 	private static $conn;
 	
-	public function _construct ($user, $password, $host) {
-		
-		$this->user = $user;
-		$this->password = $password;
-		$this->host = $host;
-		$this->dsn = "mysql:host=$host;dbname=$user";
+	public function _construct () {}
 
+	public static function getConnection() {
 		try {
-			self::$conn = new PDO($this->dsn, $this->user, $this->password);
+			self::$conn = new PDO(self::$dsn, self::$user, self::$password);
 			echo "Connected successfully<br>";
 		} 
 		catch(PDOException $e) {
 			echo "Connection failed: " . $e->getMessage();
 		}
-	}
-	public static function getConnection() {
 		return self::$conn;
 	}
 	public function _destructor () {
@@ -46,7 +42,7 @@ class Database {
 */
 class User {
 	private $id, $email, $fname, $lname, $phone, $birthday, $gender, $password;
-	
+
 	public function _construct ($id, $email, $fname, $lname, $phone, $birthday, $gender, $password) {
 		$this->id = $id;
 		$this->email = $email;
@@ -57,9 +53,9 @@ class User {
 		$this->gender = $gender;
 		$this->password = $password;
 	}
-	/*
+	
 	//ID
-	public function getId(){
+	public function getId() {
 		return $this->id;
 	}
 	public function setId($id) {
@@ -70,7 +66,7 @@ class User {
 		return $this->email;
 	}
 	public function setEmail($email) {
-		$this->email = $email
+		$this->email = $email;
 	}
 	//Fname
 	public function getFname() {
@@ -119,10 +115,10 @@ class User {
 		$out = "<table><tr>";
 		$out .= "<th>First name</th>";
 		$out .= "<th>Last name</th>";
-		$out .= "<th>Email</th>"
-		$out .= "<th>Phone</th>"
-		$out .= "<th>Birthday</th>"
-		$out .= "<th>Gender</th></tr>"
+		$out .= "<th>Email</th>";
+		$out .= "<th>Phone</th>";
+		$out .= "<th>Birthday</th>";
+		$out .= "<th>Gender</th></tr>";
 		$out .= "<tr><td>" . $this->fname . "</td>";
 		$out .= "<td>" . $this->lname . "</td>";
 		$out .= "<td>" . $this->email . "</td>";
@@ -132,7 +128,6 @@ class User {
 		$out .= "</tr></table>";
 		echo $out;
 	}
-	*/
 }
 /*
 4. You	need	to	create	a	UserDB Object (30%)
@@ -143,7 +138,6 @@ class User {
 		iv. Deleting	a	user	
 	b. Note	we	will	only be	using	the	first	method	in	this	assignment
 */
-/*
 class UserDB {
 	private $user;
 
@@ -163,19 +157,14 @@ class UserDB {
 		
 	}
 }
-*/
+
 /*
 5. Use	the	static	method	to	get	all	Users	and	display	them	in	a	table.	(25%)
 	a. Table	should	have	headers	for	each	column	that	are	bold	and	centered	(hint:	
 		there’s	an	HTML	element	that	does	it	for	you)
 	b. Borders	should	be	specified	on	the	table.
 */
-$user = "nal9";
-$password = "Movlksomh123";
-$host = "sql1.njit.edu";
-
-$pdo = new Database($user, $password, $host);
-$conn = $pdo::getConnection();
+$conn = Database::getConnection();
 echo "test";
 
 $s = "SELECT * FROM accounts WHERE id='1'";
