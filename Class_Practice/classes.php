@@ -112,20 +112,20 @@ class User {
 	}
 	//Translate into a table
 	public function toHTML() {
-		$out = "<table><tr>";
+		$out = "<table border='1'><tr>";
 		$out .= "<th>First name</th>";
 		$out .= "<th>Last name</th>";
 		$out .= "<th>Email</th>";
 		$out .= "<th>Phone</th>";
 		$out .= "<th>Birthday</th>";
 		$out .= "<th>Gender</th></tr>";
-		$out .= "<tr><td>" . $this->fname . "</td>";
-		$out .= "<td>" . $this->lname . "</td>";
-		$out .= "<td>" . $this->email . "</td>";
-		$out .= "<td>" . $this->phone . "</td>";
-		$out .= "<td>" . $this->birthday . "</td>";
-		$out .= "<td>" . $this->gender . "</td>";
-		$out .= "</tr></table>";
+		$out .= "<tr><td>" . $this->getFname() . "</td>";
+		$out .= "<td>" . $this->getLname() . "</td>";
+		$out .= "<td>" . $this->getEmail() . "</td>";
+		$out .= "<td>" . $this->getPhone() . "</td>";
+		$out .= "<td>" . $this->getBirthday() . "</td>";
+		$out .= "<td>" . $this->getGender() . "</td>";
+		$out .= "</tr></table><br />";
 		echo $out;
 	}
 }
@@ -139,8 +139,8 @@ class User {
 	b. Note	we	will	only be	using	the	first	method	in	this	assignment
 */
 class UserDB {
-	private $user;
-	private static $conn = Database::getConnection();
+	private $users;
+	//private static $conn = Database::getConnection();
 
 	public function _construct() {}
 	
@@ -152,8 +152,10 @@ class UserDB {
 		$result = $conn->prepare($s);
 		$result->execute();
 		
-		while($rows = $result->fetchAll()){
-			$newUser = new User($rows['id'], $rows['email'], $rows['fname'], $rows['lname'], $rows['phone'], $rows['birthday'], $rows['gender'], $rows['password']);
+		$rows = $result->fetchAll();
+		
+		foreach ($rows as $row) {
+			$newUser = new User($row['id'], $row['email'], $row['fname'], $row['lname'], $row['phone'], $row['birthday'], $row['gender'], $row['password']);
 			
 			$users[] = $newUser;
 		}
@@ -162,8 +164,10 @@ class UserDB {
 		return $users;
 	}
 	public function newUser($id, $email, $fname, $lname, $phone, $birthday, $gender, $password) {
+		$conn = Database::getConnection();
+	
 		$insert = "INSERT INTO accounts VALUES(:id, :email, :fname, :lname, :phone, :birthday, :gender, :password)";
-		$resultIn = self::$conn->prepare($insert);
+		$resultIn = $conn->prepare($insert);
 		$resultIn->execute(array(
 			"id" => $id,
 			"email" => $email,
@@ -176,18 +180,22 @@ class UserDB {
 		));
 	}
 	public function updatePassword($id, $password) {
+		$conn = Database::getConnection();
+	
 		$s = "UPDATE accounts SET `password` = $password WHERE id='$id'";
-		$result = self::$conn->prepare($s);
+		$result = $conn->prepare($s);
 		$result->execute();
 		
-		echo "Password updated."
+		echo "Password updated.";
 	}
 	public function deleteUser($id){
+		$conn = Database::getConnection();
+		
 		$s = "DELETE FROM accounts WHERE id='$id'";
-		$result = self::$conn->prepare($s);
+		$result = $conn->prepare($s);
 		$result->execute();
 		
-		echo "User deleted."
+		echo "User deleted.";
 	}
 }
 
@@ -197,13 +205,10 @@ class UserDB {
 		there’s	an	HTML	element	that	does	it	for	you)
 	b. Borders	should	be	specified	on	the	table.
 */
-$conn = Database::getConnection();
-echo "test";
+//$conn = Database::getConnection();
+$users = UserDB::getUsers();
 
-$s = "SELECT * FROM accounts WHERE id='1'";
-$result = $conn->prepare($s);
-$result->execute();
-
-$row = $result->fetch();
-echo $row['id'];
+foreach ($users as $user) :
+	echo $user->toHTML();
+endforeach;
 ?>
