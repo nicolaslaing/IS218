@@ -124,7 +124,7 @@ class User {
 		$out .= "<td>" . $this->email . "</td>";
 		$out .= "<td>" . $this->phone . "</td>";
 		$out .= "<td>" . $this->birthday . "</td>";
-		$out .= "<td>" . $this->birthday . "</td>";
+		$out .= "<td>" . $this->gender . "</td>";
 		$out .= "</tr></table>";
 		echo $out;
 	}
@@ -140,21 +140,54 @@ class User {
 */
 class UserDB {
 	private $user;
+	private static $conn = Database::getConnection();
 
-	public function _construct() {
-		$this-user = new User($id, $email, $fname, $lname, $phone, $birthday, $gender, $password);
-	}
+	public function _construct() {}
+	
 	public function getUsers() {
+		$conn = Database::getConnection();
+		$users = array();
 		
+		$s = "SELECT * FROM accounts";
+		$result = $conn->prepare($s);
+		$result->execute();
+		
+		while($rows = $result->fetchAll()){
+			$newUser = new User($rows['id'], $rows['email'], $rows['fname'], $rows['lname'], $rows['phone'], $rows['birthday'], $rows['gender'], $rows['password']);
+			
+			$users[] = $newUser;
+		}
+		$result->closeCursor();
+		
+		return $users;
 	}
 	public function newUser($id, $email, $fname, $lname, $phone, $birthday, $gender, $password) {
-		
+		$insert = "INSERT INTO accounts VALUES(:id, :email, :fname, :lname, :phone, :birthday, :gender, :password)";
+		$resultIn = self::$conn->prepare($insert);
+		$resultIn->execute(array(
+			"id" => $id,
+			"email" => $email,
+			"fname" => $fname,
+			"lname" => $lname,
+			"phone" => $phone,
+			"birthday" => $birthday,
+			"gender" => $gender,
+			"password" => $password
+		));
 	}
-	public function updatePassword($password) {
+	public function updatePassword($id, $password) {
+		$s = "UPDATE accounts SET `password` = $password WHERE id='$id'";
+		$result = self::$conn->prepare($s);
+		$result->execute();
 		
+		echo "Password updated."
 	}
-	public function deleteUser($user){
+	public function deleteUser($id){
+		$s = "DELETE FROM accounts WHERE id='$id'";
+		$result = self::$conn->prepare($s);
+		$result->execute();
 		
+		echo "User deleted."
 	}
 }
 
