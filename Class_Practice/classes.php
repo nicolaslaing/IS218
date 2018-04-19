@@ -12,22 +12,26 @@ ini_set('display_errors' , 1);
 		method.	
 */
 class Database {
-	private $user, $password, $host;
-	private $conn;
+	private $user, $password, $host, $dsn;
+	private static $conn;
 	
-	public static function _construct ($user, $password, $host) {
+	public function _construct ($user, $password, $host) {
+		
 		$this->user = $user;
 		$this->password = $password;
 		$this->host = $host;
-		
-		$dsn = "mysql:host=$host;dbname=$user";
+		$this->dsn = "mysql:host=$host;dbname=$user";
+
 		try {
-			$this->conn = new PDO($dsn, $user, $password);
+			self::$conn = new PDO($this->dsn, $this->user, $this->password);
 			echo "Connected successfully<br>";
 		} 
 		catch(PDOException $e) {
 			echo "Connection failed: " . $e->getMessage();
 		}
+	}
+	public static function getConnection() {
+		return self::$conn;
 	}
 	public function _destructor () {
 		$this->conn->close();
@@ -53,8 +57,9 @@ class User {
 		$this->gender = $gender;
 		$this->password = $password;
 	}
+	/*
 	//ID
-	public function getId() {
+	public function getId(){
 		return $this->id;
 	}
 	public function setId($id) {
@@ -109,7 +114,7 @@ class User {
 	public function setPassword($password) {
 		$this->password = $password;
 	}
-	
+	//Translate into a table
 	public function toHTML() {
 		$out = "<table><tr>";
 		$out .= "<th>First name</th>";
@@ -127,6 +132,7 @@ class User {
 		$out .= "</tr></table>";
 		echo $out;
 	}
+	*/
 }
 /*
 4. You	need	to	create	a	UserDB Object (30%)
@@ -137,6 +143,7 @@ class User {
 		iv. Deleting	a	user	
 	b. Note	we	will	only be	using	the	first	method	in	this	assignment
 */
+/*
 class UserDB {
 	private $user;
 
@@ -156,6 +163,7 @@ class UserDB {
 		
 	}
 }
+*/
 /*
 5. Use	the	static	method	to	get	all	Users	and	display	them	in	a	table.	(25%)
 	a. Table	should	have	headers	for	each	column	that	are	bold	and	centered	(hint:	
@@ -166,5 +174,14 @@ $user = "nal9";
 $password = "Movlksomh123";
 $host = "sql1.njit.edu";
 
-$db = new Database($user, $password, $host);
+$pdo = new Database($user, $password, $host);
+$conn = $pdo::getConnection();
+echo "test";
+
+$s = "SELECT * FROM accounts WHERE id='1'";
+$result = $conn->prepare($s);
+$result->execute();
+
+$row = $result->fetch();
+echo $row['id'];
 ?>
